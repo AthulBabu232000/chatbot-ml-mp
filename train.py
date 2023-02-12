@@ -55,12 +55,15 @@ num_workers=2
 hidden_size=8
 output_size=len(tags)
 input_size=len(x_train[0])
-print(input_size,output_size)
-print(len(all_words),len(tags))
+learning_rate=0.001
+num_epochs=1000
 
 dataset=ChatDataset()
 train_loader=DataLoader(dataset,batch_size=batch_size,shuffle=True,num_workers=num_workers)
 
 # consider batch_size and num_workers as hyper parameter withpytorch
+device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model=NeuralNet(input_size,hidden_size,output_size).to(device)
 
-model=NeuralNet(input_size,hidden_size,output_size)
+criterion=nn.CrossEntropyLoss()
+optimizer=torch.optim.Adam(model.parameters(),lr=learning_rate)
